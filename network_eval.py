@@ -5,9 +5,11 @@ import sys
 import torch
 import torchvision.transforms as transforms
 from glob import glob
+import os
 from os.path import join, basename
 from PIL import Image
 import json
+from gdrive_downloader import download_file_from_google_drive
 
 # Argument parsing
 argv = sys.argv[1:]
@@ -17,7 +19,8 @@ if len(argv) != 1:
 # Constants
 CLASSES = {0: 'Female', 1:'Male'}
 IMG_FOLDER = argv[0]
-CHECKPOINT_PATH = 'epoch_10.pth'
+CHECKPOINT_PATH = 'state.pth'
+CHECKPOINT_FILE_ID = '1--wMPNZBgBV4pEcBEDtOajRotm1LWb5N'
 
 # Transform
 init_transform = transforms.Compose([
@@ -31,11 +34,14 @@ init_transform = transforms.Compose([
 image_paths = sorted(glob(join(IMG_FOLDER, '*.jpg')))
 
 # Check if CUDA is available
-# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # Load network and weights
 from torchvision.models import vgg16
 net = vgg16(pretrained=False, num_classes=2)
+if not os.path.exists(CHECKPOINT_PATH):
+    download_file_from_google_drive(CHECKPOINT_FILE_ID, CHECKPOINT_PATH)
+
 net.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
 
