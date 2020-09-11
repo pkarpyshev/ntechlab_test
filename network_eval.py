@@ -44,12 +44,14 @@ if not os.path.exists(CHECKPOINT_PATH):
 
 net.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=device))
 
+net = net.to(device)
 
 # Process images
 results = {}
 for i in image_paths:
     img = init_transform(Image.open(i))
     img.unsqueeze_(0)
+    img = img.to(device)
     with torch.no_grad():
         output = net(img)
         _, predicted = torch.max(output.data, 1)
