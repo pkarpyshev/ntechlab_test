@@ -26,3 +26,5 @@ python3 network_eval.py folder/with/images
 ```
 
 The file uses **state.pth** file as *state_dict* and can download it automatically. The file itself can be found [here](https://drive.google.com/uc?id=1--wMPNZBgBV4pEcBEDtOajRotm1LWb5N&export=download)
+
+The training algorithm can be found in [network_train.ipynb](./network_train.ipynb). The code is optimized for Google colab, so if all cells are executed, the dataset will be downloaded and unzipped.
